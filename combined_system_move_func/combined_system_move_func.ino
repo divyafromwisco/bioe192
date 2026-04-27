@@ -1,31 +1,31 @@
-// -------------------- PIN DEFINITIONS --------------------
-
-// Large linear actuator stepper driver
+// Large system stepper driver
 const int largeStepPin = 7;
 const int largeDirPin  = 4;
+const int largeEnablePin = 10;
 
-// Small linear actuator stepper driver
+// Small system stepper driver
 const int smallStepPin = 9;
 const int smallDirPin  = 8;
+const int smallEnablePin = 11;
 
 
-// -------------------- MOTOR SETTINGS --------------------
-
-// Large actuator screw
+// Large system screw
 const int largeStepsPerRev = 200;
 const float largeLeadMmPerRev = 8.0;
 const float largeStepsPerMm = largeStepsPerRev / largeLeadMmPerRev;
 
-// Small actuator screw
+// Small system screw
 const int smallStepsPerRev = 200;
 const float smallLeadMmPerRev = 8.0;
 const float smallStepsPerMm = smallStepsPerRev / smallLeadMmPerRev;
 
 
-// -------------------- MOTION DISTANCES --------------------
+// Run Distance 
 
-float x_large_mm = 20.0;  // large actuator distance
-float y_small_mm = 10.0;  // small actuator distance
+float x_large_mm = 20.0;  // distance to move large system up for puncture
+float y_small_mm = 10.0;  // distance to pull plunger
+
+//TO DO: Add a calculation for the distance to pull plunger based on given ml, aka multiply ml by 6 mm/ml
 
 int largeStepDelayUs = 500;
 int smallStepDelayUs = 500;
@@ -77,6 +77,7 @@ void moveStepper(int stepPin, int dirPin, bool direction, long stepsToMove, int 
 // -------------------- LARGE ACTUATOR FUNCTION --------------------
 
 void moveLinearLarge(bool direction, float distance_mm, int stepDelayUs) {
+  digitalWrite(largeEnablePin, LOW); //changed to accomadate the enable pin
   long stepsToMove = round(distance_mm * largeStepsPerMm);
 
   Serial.print("Large actuator moving ");
@@ -85,12 +86,14 @@ void moveLinearLarge(bool direction, float distance_mm, int stepDelayUs) {
   Serial.println(" mm");
 
   moveStepper(largeStepPin, largeDirPin, direction, stepsToMove, stepDelayUs);
+  digitalWrite(largeEnablePin, HIGH); // added to disable motor after moving for enable pin
 }
 
 
 // -------------------- SMALL ACTUATOR FUNCTION --------------------
 
 void moveLinearSmall(bool direction, float distance_mm, int stepDelayUs) {
+  digitalWrite(smallEnablePin, LOW); //changed to accomadate the enable pin
   long stepsToMove = round(distance_mm * smallStepsPerMm);
 
   Serial.print("Small actuator moving ");
@@ -99,6 +102,7 @@ void moveLinearSmall(bool direction, float distance_mm, int stepDelayUs) {
   Serial.println(" mm");
 
   moveStepper(smallStepPin, smallDirPin, direction, stepsToMove, stepDelayUs);
+  digitalWrite(smallEnablePin, HIGH); // added to disable motor after moving for enable pin
 }
 
 

@@ -1,5 +1,11 @@
+//small subsytem stuff
 const int stepPin = 7;
 const int dirPin  = 4;
+const int enablePin = 10;
+
+//large system stuff
+
+
 
 const int stepsPerRev = 200;
 const float lead_mm_per_rev = 8.0;   // 8 mm linear travel per revolution

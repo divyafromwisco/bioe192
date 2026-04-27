@@ -52,6 +52,12 @@ void setup() {
   pinMode(smallStepPin, OUTPUT);
   pinMode(smallDirPin, OUTPUT);
 
+  pinMode(largeEnablePin, OUTPUT);
+  pinMode(smallEnablePin, OUTPUT);
+
+  digitalWrite(largeEnablePin, HIGH); // start disabled
+  digitalWrite(smallEnablePin, HIGH); // start disabled
+
   Serial.println("System ready.");
   Serial.println("Send 's' to start sequence.");
 }
@@ -78,6 +84,7 @@ void moveStepper(int stepPin, int dirPin, bool direction, long stepsToMove, int 
 
 void moveLinearLarge(bool direction, float distance_mm, int stepDelayUs) {
   digitalWrite(largeEnablePin, LOW); //changed to accomadate the enable pin
+  delay(10);
   long stepsToMove = round(distance_mm * largeStepsPerMm);
 
   Serial.print("Large actuator moving ");
@@ -87,6 +94,7 @@ void moveLinearLarge(bool direction, float distance_mm, int stepDelayUs) {
 
   moveStepper(largeStepPin, largeDirPin, direction, stepsToMove, stepDelayUs);
   digitalWrite(largeEnablePin, HIGH); // added to disable motor after moving for enable pin
+  delay(10);
 }
 
 
@@ -94,6 +102,7 @@ void moveLinearLarge(bool direction, float distance_mm, int stepDelayUs) {
 
 void moveLinearSmall(bool direction, float distance_mm, int stepDelayUs) {
   digitalWrite(smallEnablePin, LOW); //changed to accomadate the enable pin
+  delay(10);
   long stepsToMove = round(distance_mm * smallStepsPerMm);
 
   Serial.print("Small actuator moving ");
@@ -103,6 +112,7 @@ void moveLinearSmall(bool direction, float distance_mm, int stepDelayUs) {
 
   moveStepper(smallStepPin, smallDirPin, direction, stepsToMove, stepDelayUs);
   digitalWrite(smallEnablePin, HIGH); // added to disable motor after moving for enable pin
+  delay(10);
 }
 
 

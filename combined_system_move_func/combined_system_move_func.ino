@@ -23,7 +23,7 @@ const float smallStepsPerMm = smallStepsPerRev / smallLeadMmPerRev;
 // Run Distance 
 
 float x_large_mm = 20.0;  // distance to move large system up for puncture
-float y_small_mm = 10.0;  // distance to pull plunger
+float y_small_mm = 10.0;  // distance to pull plunger commented out by divya may need it however
 
 //TO DO: Add a calculation for the distance to pull plunger based on given ml, aka multiply ml by 6 mm/ml
 
@@ -59,7 +59,7 @@ void setup() {
   digitalWrite(smallEnablePin, HIGH); // start disabled
 
   Serial.println("System ready.");
-  Serial.println("Send 's' to start sequence.");
+  Serial.println("Enter volume from 0 to 10 ml to start sequence");
 }
 
 
@@ -149,7 +149,7 @@ void runReturnSequence() {
   moveLinearSmall(true, y_small_mm, smallStepDelayUs);
 
   Serial.println("Small actuator returned.");
-  Serial.println("Send 's' to start again.");
+  Serial.println("Enter volume from 0 to 10 ml to start again.");
 
   currentState = IDLE;
 }
@@ -159,22 +159,46 @@ void runReturnSequence() {
 
 void loop() {
   if (Serial.available() > 0) {
-    char command = Serial.read();
 
-    if (command == '\n' || command == '\r') {
-      return;
+    if (currentState == IDLE) {
+      float input_mL = Serial.parseFloat();
+
+      // Clear leftover newline characters
+      while (Serial.available() > 0) {
+        Serial.read();
+      }
+
+      if (input_mL >= 0 && input_mL <= 10) {
+        y_small_mm = input_mL * 6.0;
+
+        Serial.print("Input volume: ");
+        Serial.print(input_mL);
+        Serial.println(" mL");
+
+        Serial.print("Calculated plunger distance: ");
+        Serial.print(y_small_mm);
+        Serial.println(" mm");
+
+        runStartSequence();
+      } 
+      else {
+        Serial.println("Invalid input. Enter a value from 0 to 10 mL.");
+      }
     }
 
-    if (currentState == IDLE && command == 's') {
-      runStartSequence();
-    }
+    else if (currentState == WAIT_FOR_R) {
+      char command = Serial.read();
 
-    else if (currentState == WAIT_FOR_R && command == 'r') {
-      runReturnSequence();
-    }
+      if (command == '\n' || command == '\r') {
+        return;
+      }
 
-    else {
-      Serial.println("Invalid command for current state.");
+      if (command == 'r') {
+        runReturnSequence();
+      } 
+      else {
+        Serial.println("Send 'r' to move small actuator back up.");
+      }
     }
   }
 }

@@ -22,13 +22,13 @@ const float smallStepsPerMm = smallStepsPerRev / smallLeadMmPerRev;
 
 // Run Distance 
 
-float x_large_mm = 20.0;  // distance to move large system up for puncture
-float y_small_mm = 10.0;  // distance to pull plunger commented out by divya may need it however
+float x_large_mm = 30.0;  // distance to move large system up for puncture
+float y_small_mm = 18.0;  // distance to pull plunger commented out by divya may need it however
 
 //TO DO: Add a calculation for the distance to pull plunger based on given ml, aka multiply ml by 6 mm/ml
 
-int largeStepDelayUs = 500;
-int smallStepDelayUs = 500;
+int largeStepDelayUs = 1500;
+int smallStepDelayUs = 1500;
 
 
 // -------------------- STATE MACHINE --------------------
@@ -68,7 +68,7 @@ void setup() {
 void moveStepper(int stepPin, int dirPin, bool direction, long stepsToMove, int stepDelayUs) {
   digitalWrite(dirPin, direction ? HIGH : LOW);
 
-  delayMicroseconds(10); // small setup time for direction pin
+  delayMicroseconds(100); // small setup time for direction pin
 
   for (long i = 0; i < stepsToMove; i++) {
     digitalWrite(stepPin, HIGH);

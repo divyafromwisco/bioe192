@@ -24,8 +24,8 @@ const float smallStepsPerMm = smallStepsPerRev / smallLeadMmPerRev;
 
 // -------------------- DISTANCES --------------------
 
-float x_large_mm = 55.0;  // large motor puncture distance
-float y_small_mm = 18.0;  // small motor plunger distance
+float x_large_mm = 60.0;  // large motor puncture distance
+float y_small_mm = 48.0;  // small motor plunger distance
 
 
 // -------------------- SPEED --------------------
@@ -146,7 +146,7 @@ void runStartSequence() {
 
   // 2. Small system moves down y
   moveSmallDown(y_small_mm);
-  delay(500);
+  delay(10000);
 
   // 3. Large system moves down x
   moveLargeDown(x_large_mm);

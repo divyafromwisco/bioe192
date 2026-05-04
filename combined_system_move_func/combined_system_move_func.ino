@@ -22,7 +22,7 @@ const float smallStepsPerMm = smallStepsPerRev / smallLeadMmPerRev;
 
 // Run Distance 
 
-float x_large_mm = 30.0;  // distance to move large system up for puncture
+float x_large_mm = 50.0;  // distance to move large system up for puncture
 float y_small_mm = 18.0;  // distance to pull plunger commented out by divya may need it however
 
 //TO DO: Add a calculation for the distance to pull plunger based on given ml, aka multiply ml by 6 mm/ml
